@@ -29,7 +29,7 @@ CREATE TABLE category (
 CREATE TABLE food (
     id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
-    type ENUM('soup','main','dessert','other') NOT NULL DEFAULT 'other',
+    type ENUM('polévká','hlavní jídlo','dezert','jiný') NOT NULL DEFAULT 'jiný',
     is_vegetarian BOOLEAN NOT NULL DEFAULT 0
 );
 
@@ -53,11 +53,11 @@ CREATE TABLE review (
     food_id INT NOT NULL,
     rating int UNSIGNED CHECK (rating <= 100 and rating >= 0),
     comment VARCHAR(256),
-    portion_size ENUM('hungry','just_right','stuffed') DEFAULT 'just_right',
-    temperature ENUM('cold','ok','hot') DEFAULT 'ok',
-    appearance int CHECK (appearance <= 5 and appearance >= 0),
+    portion_size ENUM('hladový','akorát','přejedený') DEFAULT 'akorát',
+    temperature ENUM('ledový','studené ','akorát','horký','vařící') DEFAULT 'akorát',
+    appearance int CHECK (appearance <= 5 and appearance >= 0) default 0,
     extra_pay int DEFAULT 0,
-    cook_recommendation ENUM('varit','nevarit') DEFAULT 'varit',
+    cook_recommendation ENUM('vařit','nevařit') DEFAULT 'vařit',
     original_created_date   DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     last_update_date   DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
 
