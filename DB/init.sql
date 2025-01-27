@@ -1,6 +1,8 @@
 CREATE SCHEMA `Food_review` DEFAULT CHARACTER SET utf8 ;
 use Food_review;
+SET autocommit = OFF;
 
+start transaction;
 CREATE TABLE user (
     id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(100),
@@ -69,5 +71,5 @@ CREATE TABLE review (
         FOREIGN KEY (food_id) REFERENCES food(id)
         ON DELETE CASCADE ON UPDATE CASCADE
 );
-
+COMMIT;
 -- allergens will be added lated if needed
