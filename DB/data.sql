@@ -1,12 +1,15 @@
+use Food_review;
+SET autocommit = OFF;
+
 start transaction;
 -- Vložení dat do tabulky category
-INSERT INTO category (name, description) VALUES
-('Slané', 'Jídla s výraznou slanou chutí'),
-('Sladké', 'Jídla s cukrem nebo sladkými ingrediencemi'),
-('Pálivé', 'Pikantní a ostrá jídla'),
-('Kyselé', 'Jídla s kyselou chutí'),
-('Hořké', 'Jídla s hořkou chutí'),
-('Umami', 'Jídla s plnou chutí umami');
+INSERT INTO category (name) VALUES
+('Slané'),
+('Sladké'),
+('Pálivé'),
+('Kyselé'),
+('Hořké'),
+('Umami');
 
 -- Vložení dat do tabulky food
 INSERT INTO food (name, type, is_vegetarian) VALUES
