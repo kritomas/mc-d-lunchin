@@ -18,7 +18,7 @@ CREATE TABLE credentials (
     password VARCHAR(255) NOT NULL,
     user_id INT NOT NULL unique,
     
-	CONSTRAINT fk_user_id
+	CONSTRAINT fk_credentials_user_id
 			FOREIGN KEY (user_id) REFERENCES user(id)
 			ON DELETE CASCADE ON UPDATE CASCADE
 );
@@ -40,11 +40,11 @@ CREATE TABLE food_category (
     food_id INT NOT NULL,
     category_id INT NOT NULL,
 
-    CONSTRAINT fk_food_id
+    CONSTRAINT fk_foodcategory_food_id
         FOREIGN KEY (food_id) REFERENCES food(id)
         ON DELETE CASCADE ON UPDATE CASCADE,
 
-    CONSTRAINT fk_category_id
+    CONSTRAINT fk_foodcategory_category_id
         FOREIGN KEY (category_id) REFERENCES category(id)
         ON DELETE CASCADE ON UPDATE CASCADE
 );
@@ -56,18 +56,18 @@ CREATE TABLE review (
     rating int UNSIGNED CHECK (rating <= 100 and rating >= 0),
     comment VARCHAR(256),
     portion_size ENUM('hladový','akorát','přejedený') DEFAULT 'akorát',
-    temperature ENUM('ledový','studené ','akorát','horký','vařící') DEFAULT 'akorát',
-    appearance int CHECK (appearance <= 5 and appearance >= 0) default 0,
+    temperature ENUM('ledový','studené','akorát','horký','vařící') DEFAULT 'akorát',
+    appearance int default 0 CHECK (appearance <= 5 and appearance >= 0),
     extra_pay int DEFAULT 0,
     cook_recommendation ENUM('vařit','nevařit') DEFAULT 'vařit',
     original_created_date   DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     last_update_date   DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
 
-    CONSTRAINT fk_user_id
+    CONSTRAINT fk_review_user_id
         FOREIGN KEY (user_id) REFERENCES user(id)
         ON DELETE CASCADE ON UPDATE CASCADE,
 
-    CONSTRAINT fk_food_id
+    CONSTRAINT fk_review_food_id
         FOREIGN KEY (food_id) REFERENCES food(id)
         ON DELETE CASCADE ON UPDATE CASCADE
 );
