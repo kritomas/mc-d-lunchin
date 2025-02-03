@@ -20,7 +20,8 @@ INSERT INTO food (name, type, is_vegetarian) VALUES
 ('Dýňová polévka', 'polévká', 1),
 ('Chilli con carne', 'hlavní jídlo', 0),
 ('Kimchi', 'jiný', 1),
-('Citrónový koláč', 'dezert', 1);
+('Citrónový koláč', 'dezert', 1),
+('Bryndzové halušky', 'hlavní jídlo', 1);
 
 -- Vložení dat do tabulky food_category
 INSERT INTO food_category (food_id, category_id) VALUES
@@ -37,7 +38,9 @@ INSERT INTO food_category (food_id, category_id) VALUES
 (10, 3), -- Kimchi je pálivé
 (10, 4), -- Kimchi má také kyselou chuť
 (11, 2), -- Citrónový koláč je sladký
-(11, 4); -- Citrónový koláč je kyselý
+(11, 4), -- Citrónový koláč je kyselý
+(12, 1), -- Slané
+(12, 6); -- Umami
 
 COMMIT;
 rollback;
