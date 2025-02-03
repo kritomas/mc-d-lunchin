@@ -3,6 +3,7 @@ use Food_review;
 SET autocommit = OFF;
 
 start transaction;
+
 CREATE TABLE user (
     id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(100),
@@ -15,23 +16,22 @@ CREATE TABLE credentials (
     email VARCHAR(255) NOT NULL UNIQUE,
     username VARCHAR(100) NOT NULL UNIQUE,
     password VARCHAR(255) NOT NULL,
-    credentials_id INT NOT NULL unique,
+    user_id INT NOT NULL unique,
     
-	CONSTRAINT fk_user_credentials
-			FOREIGN KEY (credentials_id) REFERENCES credentials(id)
+	CONSTRAINT fk_user_id
+			FOREIGN KEY (user_id) REFERENCES user(id)
 			ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 CREATE TABLE category (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    name VARCHAR(100) NOT NULL,
-    description VARCHAR(255)
+    name VARCHAR(100) NOT NULL
 );
 
 CREATE TABLE food (
     id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
-    type ENUM('polévká','hlavní jídlo','dezert','jiný') NOT NULL DEFAULT 'jiný',
+    type ENUM('polévká','hlavní jídlo','dezert','jiný') NOT NULL DEFAULT 'jiný', -- počítáme s tím že vláda nezmění definici dezertu
     is_vegetarian BOOLEAN NOT NULL DEFAULT 0
 );
 
@@ -40,11 +40,11 @@ CREATE TABLE food_category (
     food_id INT NOT NULL,
     category_id INT NOT NULL,
 
-    CONSTRAINT fk_foodcategory_food
+    CONSTRAINT fk_food_id
         FOREIGN KEY (food_id) REFERENCES food(id)
         ON DELETE CASCADE ON UPDATE CASCADE,
 
-    CONSTRAINT fk_foodcategory_category
+    CONSTRAINT fk_category_id
         FOREIGN KEY (category_id) REFERENCES category(id)
         ON DELETE CASCADE ON UPDATE CASCADE
 );
@@ -63,11 +63,11 @@ CREATE TABLE review (
     original_created_date   DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     last_update_date   DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
 
-    CONSTRAINT fk_review_user
+    CONSTRAINT fk_user_id
         FOREIGN KEY (user_id) REFERENCES user(id)
         ON DELETE CASCADE ON UPDATE CASCADE,
 
-    CONSTRAINT fk_review_food
+    CONSTRAINT fk_food_id
         FOREIGN KEY (food_id) REFERENCES food(id)
         ON DELETE CASCADE ON UPDATE CASCADE
 );
