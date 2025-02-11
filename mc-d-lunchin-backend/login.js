@@ -5,6 +5,7 @@ export async function LoginUser(name_email, password) {
     const pool = await DBConnection();
     
     try {
+        let user;
         const [username_rows] = await pool.execute('SELECT  password,user_id FROM credentials WHERE username = ?', [name_email]);
         
         if (username_rows.length === 0) {
@@ -12,7 +13,7 @@ export async function LoginUser(name_email, password) {
             if (email_rows.length === 0) {
                 return { success: false, message: 'User not found' };
             }else{
-                user = username_rows[0]
+                user = email_rows[0]
             }
         }else{
             user = username_rows[0]
