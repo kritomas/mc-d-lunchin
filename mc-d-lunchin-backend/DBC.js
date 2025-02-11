@@ -2,7 +2,7 @@ import mysql from 'mysql2';
 import dotenv from 'dotenv';
 dotenv.config()
 
-function DBConnection(){
+export async function DBConnection(){
     const pool = mysql.createPool({
         host: process.env.host,
         user: process.env.user,
