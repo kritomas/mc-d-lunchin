@@ -8,8 +8,8 @@ export async function RegisterUser(name, last_name, phone, email, username, pass
     
     try {
         await connection.beginTransaction();
-        const [user_rows] = await pool.execute('INSERT INTO user (name, last_name, phone) VALUES (?, ?, ?)', [username, last_name, phone]);
-        let user_id = rows.insertId
+        const [user_rows] = await pool.execute('INSERT INTO user (name, last_name, phone) VALUES (?, ?, ?)', [name, last_name, phone]);
+        let user_id = user_rows.insertId
         await pool.execute('INSERT INTO credentials (email, username, password, user_id) VALUES (?, ?, ?, ?)', [email, username, hashedPassword, user_id]);
 
         await connection.commit();
