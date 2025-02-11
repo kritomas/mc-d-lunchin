@@ -73,3 +73,10 @@ CREATE TABLE review (
 );
 COMMIT;
 -- allergens will be added lated if needed
+
+delimiter //
+create view Food_Join
+as
+select f.name,f.type,c.name,f.is_vegetarian
+from food as f inner join food_category as fc on fc.food_id = f.id
+				inner join category as c on fc.category_id = c.id; //
