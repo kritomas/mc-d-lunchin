@@ -8,8 +8,57 @@ import Button from '@mui/material/Button';
 import { styled } from '@mui/material/styles';
 import RestaurantMenuIcon from '@mui/icons-material/RestaurantMenu';
 import PsychologyIcon from '@mui/icons-material/Psychology';
+import { useState, useEffect } from "react";
 
 const AboutUs = () => {
+    const [loopNum, setLoopNum] = useState(0);
+  const [isDeleting, setIsDeleting] = useState(false);
+  const [text, setText] = useState("");
+  const [delta, setDelta] = useState(300 - Math.random() * 100);
+  const [index, setIndex] = useState(1);
+  const toRotate = [
+    "your skibid",
+    "super rewies",
+    "is cool as fuck",
+  ];
+  const period = 2000;
+
+  useEffect(() => {
+    let ticker = setInterval(() => {
+      tick();
+    }, delta);
+
+    return () => {
+      clearInterval(ticker);
+    };
+  }, [text]);
+
+  const tick = () => {
+    let i = loopNum % toRotate.length;
+    let fullText = toRotate[i];
+    let updatedText = isDeleting
+      ? fullText.substring(0, text.length - 1)
+      : fullText.substring(0, text.length + 1);
+
+    setText(updatedText);
+
+    if (isDeleting) {
+      setDelta((prevDelta) => prevDelta / 2);
+    }
+
+    if (!isDeleting && updatedText === fullText) {
+      setIsDeleting(true);
+      setIndex((prevIndex) => prevIndex - 1);
+      setDelta(period);
+    } else if (isDeleting && updatedText === "") {
+      setIsDeleting(false);
+      setLoopNum(loopNum + 1);
+      setIndex(1);
+      setDelta(500);
+    } else {
+      setIndex((prevIndex) => prevIndex + 1);
+    }
+  };
   return (
     <Card 
       sx={{ 
@@ -20,6 +69,10 @@ const AboutUs = () => {
       }}
     >
       <CardContent>
+      <h1>
+              {"MC D. Lunchin "}
+              <span className="wrap">{text}</span>
+            </h1>
         <Box 
           sx={{ 
             display: 'flex', 
@@ -37,7 +90,7 @@ const AboutUs = () => {
               color: '#333'
             }}
           >
-            MC D. Lunch
+        
           </Typography>
         </Box>
 
@@ -52,7 +105,6 @@ const AboutUs = () => {
         >
           About Us
         </Typography>
-
         <Box sx={{ mb: 4 }}>
           <Typography variant="body1" sx={{ textAlign: 'center' }}>
             We're on a mission to make school lunches better for everyone. Our platform allows students, parents, and schools to share feedback about school meals in a fun and constructive way.
@@ -95,7 +147,7 @@ const AboutUs = () => {
         <Box sx={{ textAlign: 'center' }}>
           <Button 
             variant="contained" 
-            href="/Signin" 
+            href="/signin" 
             sx={{ mt: 2 }}
           >
            Sign In
