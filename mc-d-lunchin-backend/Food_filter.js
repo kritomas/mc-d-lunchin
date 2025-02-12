@@ -2,33 +2,29 @@ import { DBConnection } from './DBC.js';
 
 // 1. Returns ID of food where category IN (provided categories)
 async function getFoodByCategoryIn(categories, callback) {
-    const pool = await DBConnection();
     const query = 'SELECT id FROM Food_Join WHERE name IN (?)';
-    let result =  await pool.query(query, [categories]);
+    let result =  await DBConnection.query(query, [categories]);
     return result[0]
 }
 
 // 2. Returns ID of food where category NOT IN (provided categories)
 async function getFoodByCategoryNotIn(categories, callback) {
-    const pool = await DBConnection();
     const query = 'SELECT id FROM Food_Join WHERE name NOT IN (?)';
-    let result = await pool.query(query, [categories]);
+    let result = await DBConnection.query(query, [categories]);
     return result[0]
 }
 
 // 3. Returns ID of food where type IN (provided types)
 async function getFoodByTypeIn(types, callback) {
-    const pool = await DBConnection();
     const query = 'SELECT id FROM Food_Join WHERE type IN (?)';
-    let result = await pool.query(query, [types]);
+    let result = await DBConnection.query(query, [types]);
     return result[0]
 }
 
 // 5. Returns ID of food where vegetarian = TRUE or FALSE based on input
 async function getFoodByVegetarian(isVegetarian, callback) {
-    const pool = await DBConnection();
     const query = 'SELECT id FROM Food_Join WHERE is_vegetarian = ?';
-    let result = await pool.query(query, [isVegetarian ? 1 : 0]);
+    let result = await DBConnection.query(query, [isVegetarian ? 1 : 0]);
     return result[0]
 }
 
