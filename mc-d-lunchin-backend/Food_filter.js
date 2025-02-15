@@ -9,7 +9,7 @@ async function getFoodByCategoryIn(categories, callback) {
 
 // 2. Returns ID of food where category NOT IN (provided categories)
 async function getFoodByCategoryNotIn(categories, callback) {
-    const query = 'SELECT id FROM Food_Join WHERE name NOT IN (?)';
+    const query = 'SELECT id FROM Food_Join WHERE name IN (?)';
     let result = await DBConnection.query(query, [categories]);
     return result[0]
 }
@@ -28,33 +28,36 @@ async function getFoodByVegetarian(isVegetarian, callback) {
     return result[0]
 }
 
-async function getAllFoodData(categoriesIn, categoriesNotIn, typesIn, typesNotIn, isVegetarian) {
+async function getAllFoodData(categoriesIn, categoriesNotIn, typesIn, isVegetarian) {
     // Step 1: Get all the food data
     const foodByCategoryIn = await getFoodByCategoryIn(categoriesIn);
     const foodByCategoryNotIn = await getFoodByCategoryNotIn(categoriesNotIn);
     const foodByTypeIn = await getFoodByTypeIn(typesIn);
     const foodByVegetarian = await getFoodByVegetarian(isVegetarian);
+    
+    const getIds = (array) => new Set(array.map(item => item.id));
 
-    // Map the results to ids
-    let finalList = foodByCategoryIn.map(item => item.id);
-
-    // Step 2: Remove items that are in foodByCategoryNotIn
-    const categoryNotInSet = new Set(foodByCategoryNotIn.map(item => item.id));
-    finalList = finalList.filter(id => !categoryNotInSet.has(id));
-
-    // Step 3: Keep only items that are in foodByTypeIn
-    const typeInSet = new Set(foodByTypeIn.map(item => item.id));
-    finalList = finalList.filter(id => typeInSet.has(id));
-
-
-    // Step 5: Keep only items that are in foodByVegetarian
-    const vegetarianSet = new Set(foodByVegetarian.map(item => item.id));
-    finalList = finalList.filter(id => vegetarianSet.has(id));
+    const foodByCategoryInIds = getIds(foodByCategoryIn);
+    const foodByCategoryNotInIds = getIds(foodByCategoryNotIn);
+    const foodByTypeInIds = getIds(foodByTypeIn);
+    const foodByVegetarianIds = getIds(foodByVegetarian);
+    
+    // Step 1: Keep only IDs in foodByCategoryIn that are NOT in foodByCategoryNotIn
+    const filteredByCategory = [...foodByCategoryInIds].filter(id => !foodByCategoryNotInIds.has(id));
+    console.log(filteredByCategory);
+    
+    // Step 2: Keep only IDs that are also in foodByTypeIn
+    const filteredByType = filteredByCategory.filter(id => foodByTypeInIds.has(id));
+    console.log(filteredByType);
+    // Step 3: Keep only IDs that are also in foodByVegetarian
+    const finalList = filteredByType.filter(id => foodByVegetarianIds.has(id));
+    
 
     return finalList;
 }
 
-async function exampleCall() {
+
+/* async function exampleCall() {
     // Define the categories, types, and vegetarian flag you want to use
     const categoriesIn = ['Slané']; // Categories to include
     const categoriesNotIn = ['Umami'];           // Categories to exclude
@@ -69,4 +72,4 @@ async function exampleCall() {
 }
 
 // Call the example function
-exampleCall();
+exampleCall(); */
