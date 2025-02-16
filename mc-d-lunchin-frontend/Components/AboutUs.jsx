@@ -17,9 +17,9 @@ const AboutUs = () => {
   const [delta, setDelta] = useState(300 - Math.random() * 100);
   const [index, setIndex] = useState(1);
   const toRotate = [
-    "your skibid",
+    "your skibidi",
     "super rewies",
-    "is cool as fuck",
+    "is cool as hell",
   ];
   const period = 2000;
 
