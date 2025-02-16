@@ -11,7 +11,6 @@ const BottomBar = () => {
     <AppBar 
       position="fixed" 
       sx={{ 
-        backgroundColor: '#333', 
         top: 'auto', 
         bottom: 0,
         width: '100%',
@@ -40,7 +39,7 @@ const BottomBar = () => {
                 Privacy Policy
               </Link>
               |
-              <Link href="#" color="inherit" underline="none" sx={{ mx: 1 }}>
+              <Link href="https://anime-feet.com/" color="inherit" underline="none" sx={{ mx: 1 }}>
                 Terms of Service
               </Link>
             </Typography>

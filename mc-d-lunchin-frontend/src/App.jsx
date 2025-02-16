@@ -20,7 +20,6 @@ const darkTheme = createTheme({
 function App() {
   return (
     <ThemeProvider theme={darkTheme}>
-
     <Router>
       <div className="App">
 
