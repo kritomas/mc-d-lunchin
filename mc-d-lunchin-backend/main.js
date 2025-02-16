@@ -9,6 +9,12 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+/**
+ * Login endpoint.
+ *
+ * Input: {"username": "string", "password": "string"}
+ * Output: {"id": integer} // id = id of user that logged in
+ */
 app.put("/api/user", async (req, res, next) => // Login endpoint
 {
 	try
@@ -30,6 +36,12 @@ app.put("/api/user", async (req, res, next) => // Login endpoint
 	}
 });
 
+/**
+ * Get Foods.
+ *
+ * Input: {"category_whitelist": [One or more of categories], "category_blacklist": [One or more of categories], "type": ['polévká','hlavní jídlo','dezert','jiný'], "is_vegetarian": boolean}
+ * Output: [Foods]
+ */
 app.put("/api/food", async (req, res, next) =>
 {
 	try
@@ -44,6 +56,12 @@ app.put("/api/food", async (req, res, next) =>
 	}
 });
 
+/**
+ * Post a new Review.
+ *
+ * Input: {"user_id": integer, "food_id": integer, "rating": 0-100, "comment": "string", "portion_size": ['hladový', 'akorát', 'přejedený'], "temperature": ['ledový', 'studené', 'akorát', 'horký', 'vařící'], "appearance": 0-5, "extra_pay": integer, "cook_recommendation": ['vařit', 'nevařit']}
+ * Output: "string"
+ */
 app.post("/api/review", async (req, res, next) =>
 {
 	try
@@ -64,6 +82,12 @@ app.post("/api/review", async (req, res, next) =>
 		next(e);
 	}
 });
+/**
+ * Update an existing Review.
+ *
+ * Input: {"id": integer, "rating": 0-100, "comment": "string", "portion_size": ['hladový', 'akorát', 'přejedený'], "temperature": ['ledový', 'studené', 'akorát', 'horký', 'vařící'], "appearance": 0-5, "extra_pay": integer, "cook_recommendation": ['vařit', 'nevařit']}
+ * Output: "string"
+ */
 app.patch("/api/review", async (req, res, next) =>
 {
 	try
