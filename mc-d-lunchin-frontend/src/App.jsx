@@ -5,6 +5,7 @@ import LandingPage from '../Pages/LandingPage'
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import LoginPage from '../Pages/LoginPage'
+import FoodFilter from '../Components/FoodFilter';
 
 const darkTheme = createTheme({
   palette: {
@@ -26,6 +27,7 @@ function App() {
         <Routes>
           <Route path="/" element={<LandingPage />} />
           <Route path="/signin" element={<LoginPage />} />
+          <Route path="/filter" element={<FoodFilter />} />
         </Routes>
       </div>
     </Router>
