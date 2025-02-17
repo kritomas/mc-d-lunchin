@@ -25,6 +25,6 @@ export async function LoginUser(name_email, password) {
 
         return { success: true, userId: user.user_id };
     } catch (error) {
-        return { success: false, message: error.message };
+        return { success: false, message: error };
     }
 }
