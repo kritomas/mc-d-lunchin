@@ -1,15 +1,18 @@
 import { useState } from "react";
 import { Card, CardHeader, CardContent, Button, TextField } from "@mui/material";
+import { useNavigate } from "react-router-dom";
 
 export default function LoginForm() {
   const [formData, setFormData] = useState({
     identifier: "",
     password: "",
   });
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
@@ -23,21 +26,23 @@ export default function LoginForm() {
           password: formData.password,
         }),
       });
-  
+
       if (!response.ok) {
         const error = await response.json();
         throw new Error(error.message);
       }
-  
+
       const data = await response.json();
       console.log("Login successful", data);
-      // Here you can handle successful login (e.g., store user ID, redirect, etc.)
+      // Redirect to profile page after successful login
+      navigate("/profile");
     } catch (error) {
       console.error("Login failed:", error.message);
-      // Here you can handle the error (e.g., show error message to user)
+      // You can show an error message to the user here
+      alert("Login failed. Please check your credentials.");
     }
   };
-  
+
   return (
     <div style={{ display: 'flex', justifyContent: 'center', marginTop: '20px' }}>
       <Card sx={{ maxWidth: '400px', padding: '20px', boxShadow: '0 0 10px rgba(0,0,0,0.1)' }}>
