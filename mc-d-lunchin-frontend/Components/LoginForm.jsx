@@ -10,13 +10,34 @@ export default function LoginForm() {
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
-
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Login Data:", formData);
-    // Add login logic here
+    try {
+      const response = await fetch("/api/user", {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          username: formData.identifier,
+          password: formData.password,
+        }),
+      });
+  
+      if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.message);
+      }
+  
+      const data = await response.json();
+      console.log("Login successful", data);
+      // Here you can handle successful login (e.g., store user ID, redirect, etc.)
+    } catch (error) {
+      console.error("Login failed:", error.message);
+      // Here you can handle the error (e.g., show error message to user)
+    }
   };
-
+  
   return (
     <div style={{ display: 'flex', justifyContent: 'center', marginTop: '20px' }}>
       <Card sx={{ maxWidth: '400px', padding: '20px', boxShadow: '0 0 10px rgba(0,0,0,0.1)' }}>
