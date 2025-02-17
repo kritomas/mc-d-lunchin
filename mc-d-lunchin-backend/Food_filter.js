@@ -28,30 +28,30 @@ async function getFoodByVegetarian(isVegetarian, callback) {
     return result[0]
 }
 
-async function getAllFoodData(categoriesIn, categoriesNotIn, typesIn, isVegetarian) {
+export async function getAllFoodData(categoriesIn, categoriesNotIn, typesIn, isVegetarian) {
     // Step 1: Get all the food data
     const foodByCategoryIn = await getFoodByCategoryIn(categoriesIn);
     const foodByCategoryNotIn = await getFoodByCategoryNotIn(categoriesNotIn);
     const foodByTypeIn = await getFoodByTypeIn(typesIn);
     const foodByVegetarian = await getFoodByVegetarian(isVegetarian);
-    
+
     const getIds = (array) => new Set(array.map(item => item.id));
 
     const foodByCategoryInIds = getIds(foodByCategoryIn);
     const foodByCategoryNotInIds = getIds(foodByCategoryNotIn);
     const foodByTypeInIds = getIds(foodByTypeIn);
     const foodByVegetarianIds = getIds(foodByVegetarian);
-    
+
     // Step 1: Keep only IDs in foodByCategoryIn that are NOT in foodByCategoryNotIn
     const filteredByCategory = [...foodByCategoryInIds].filter(id => !foodByCategoryNotInIds.has(id));
     console.log(filteredByCategory);
-    
+
     // Step 2: Keep only IDs that are also in foodByTypeIn
     const filteredByType = filteredByCategory.filter(id => foodByTypeInIds.has(id));
     console.log(filteredByType);
     // Step 3: Keep only IDs that are also in foodByVegetarian
     const finalList = filteredByType.filter(id => foodByVegetarianIds.has(id));
-    
+
 
     return finalList;
 }

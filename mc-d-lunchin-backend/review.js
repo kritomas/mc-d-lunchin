@@ -1,7 +1,7 @@
 import { DBConnection } from './DBC.js';
 
 // Function to create a review and insert into DB
-async function createReview(user_id, food_id, rating, comment, portion_size, temperature, appearance, extra_pay, cook_recommendation) {
+export async function createReview(user_id, food_id, rating, comment, portion_size, temperature, appearance, extra_pay, cook_recommendation) {
     // Validation checks
     if (rating < 0 || rating > 100) {
         return { success: false, message: 'Rating must be between 0 and 100.' };
@@ -38,7 +38,7 @@ async function createReview(user_id, food_id, rating, comment, portion_size, tem
     };
 
     // Insert the review into the database
-    const query = `INSERT INTO review (user_id, food_id, rating, comment, portion_size, temperature, appearance, extra_pay, cook_recommendation) 
+    const query = `INSERT INTO review (user_id, food_id, rating, comment, portion_size, temperature, appearance, extra_pay, cook_recommendation)
                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`;
 
     const values = [
@@ -61,7 +61,7 @@ async function createReview(user_id, food_id, rating, comment, portion_size, tem
     }
 }
 
-async function updateReview(id, rating, comment, portion_size, temperature, appearance, extra_pay, cook_recommendation) {
+export async function updateReview(id, rating, comment, portion_size, temperature, appearance, extra_pay, cook_recommendation) {
     // Validation checks
     if (rating < 0 || rating > 100) {
         return { success: false, message: 'Rating must be between 0 and 100.' };
@@ -96,8 +96,8 @@ async function updateReview(id, rating, comment, portion_size, temperature, appe
     };
 
     // Update the review in the database
-    const query = `UPDATE review 
-                   SET rating = ?, comment = ?, portion_size = ?, temperature = ?, appearance = ?, extra_pay = ?, cook_recommendation = ? 
+    const query = `UPDATE review
+                   SET rating = ?, comment = ?, portion_size = ?, temperature = ?, appearance = ?, extra_pay = ?, cook_recommendation = ?
                    WHERE id = ?`;
 
     const values = [

@@ -123,6 +123,11 @@ app.patch("/api/review", async (req, res, next) =>
 
 app.use(express.static("dist"));
 
+app.get('*', (req, res) =>
+{
+	res.sendFile("/media/localdisk/git/Praktikum/mc-d-lunchin/mc-d-lunchin-backend/dist/index.html");
+});
+
 app.listen(PORT, () =>
 {
 	console.log("mc-d-lunchin backend listening at " + PORT);
