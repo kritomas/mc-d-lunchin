@@ -55,19 +55,31 @@ app.put("/api/food", async (req, res, next) =>
 		next(e);
 	}
 });
+app.get("/api/food/:id", async (req, res, next) =>
+{
+	try
+	{
+		const id = req.params.id;
+		// TODO
+	}
+	catch (e)
+	{
+		next(e);
+	}
+});
 
 /**
  * Post a new Review.
  *
- * Input: {"user_id": integer, "food_id": integer, "rating": 0-100, "comment": "string", "portion_size": ['hladový', 'akorát', 'přejedený'], "temperature": ['ledový', 'studené', 'akorát', 'horký', 'vařící'], "appearance": 0-5, "extra_pay": integer, "cook_recommendation": ['vařit', 'nevařit']}
+ * Input: {"user_id": integer, "food_id": integer, "rating": 0-100, "comment": "string", "portion_size": ['hladový', 'akorát', 'přejedený'], "temperature": ['ledový', 'studené', 'akorát', 'horký', 'vařící'], "appearance": 0-5, "tip": integer, "cook_recommendation": ['vařit', 'nevařit']}
  * Output: "string"
  */
 app.post("/api/review", async (req, res, next) =>
 {
 	try
 	{
-		const {user_id, food_id, rating, comment, portion_size, temperature, appearance, extra_pay, cook_recommendation} = req.body;
-		const result = await createReview(user_id, food_id, rating, comment, portion_size, temperature, appearance, extra_pay, cook_recommendation);
+		const {user_id, food_id, rating, comment, portion_size, temperature, appearance, tip, cook_recommendation} = req.body;
+		const result = await createReview(user_id, food_id, rating, comment, portion_size, temperature, appearance, tip, cook_recommendation);
 		if (result.success)
 		{
 			res.status(200).send(result.message); // TODO Return ID of review
@@ -85,15 +97,15 @@ app.post("/api/review", async (req, res, next) =>
 /**
  * Update an existing Review.
  *
- * Input: {"id": integer, "rating": 0-100, "comment": "string", "portion_size": ['hladový', 'akorát', 'přejedený'], "temperature": ['ledový', 'studené', 'akorát', 'horký', 'vařící'], "appearance": 0-5, "extra_pay": integer, "cook_recommendation": ['vařit', 'nevařit']}
+ * Input: {"id": integer, "rating": 0-100, "comment": "string", "portion_size": ['hladový', 'akorát', 'přejedený'], "temperature": ['ledový', 'studené', 'akorát', 'horký', 'vařící'], "appearance": 0-5, "tip": integer, "cook_recommendation": ['vařit', 'nevařit']}
  * Output: "string"
  */
 app.patch("/api/review", async (req, res, next) =>
 {
 	try
 	{
-		const {id, rating, comment, portion_size, temperature, appearance, extra_pay, cook_recommendation} = req.body;
-		const result = await updateReview(id, rating, comment, portion_size, temperature, appearance, extra_pay, cook_recommendation);
+		const {id, rating, comment, portion_size, temperature, appearance, tip, cook_recommendation} = req.body;
+		const result = await updateReview(id, rating, comment, portion_size, temperature, appearance, tip, cook_recommendation);
 		if (result.success)
 		{
 			res.status(200).send(result.message);
