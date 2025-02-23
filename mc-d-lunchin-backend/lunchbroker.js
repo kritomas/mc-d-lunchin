@@ -1,8 +1,6 @@
 import axios from "axios";
 import * as cheerio from "cheerio";
 
-
-// Replace this URL with the actual URL from which you want to scrape the lunch data.
 const TARGET_URL = "https://strav.nasejidelna.cz/0341/login";
 
 export async function scrapeLunches() {

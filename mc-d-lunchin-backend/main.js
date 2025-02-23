@@ -38,7 +38,7 @@ app.put("/api/user", async (req, res, next) => // Login endpoint
 });
 
 /**
- * Get Foods.
+ * Gets Foods.
  *
  * Input: {"category_whitelist": [One or more of categories], "category_blacklist": [One or more of categories], "type": ['polévká','hlavní jídlo','dezert','jiný'], "is_vegetarian": boolean}
  * Output: [Foods]
@@ -70,7 +70,7 @@ app.get("/api/food/:id", async (req, res, next) =>
 });
 
 /**
- * Post a new Review.
+ * Posts a new Review.
  *
  * Input: {"user_id": integer, "food_id": integer, "rating": 0-100, "comment": "string", "portion_size": ['hladový', 'akorát', 'přejedený'], "temperature": ['ledový', 'studené', 'akorát', 'horký', 'vařící'], "appearance": 0-5, "tip": integer, "cook_recommendation": ['vařit', 'nevařit']}
  * Output: "string"
@@ -96,7 +96,7 @@ app.post("/api/review", async (req, res, next) =>
 	}
 });
 /**
- * Update an existing Review.
+ * Updates an existing Review.
  *
  * Input: {"id": integer, "rating": 0-100, "comment": "string", "portion_size": ['hladový', 'akorát', 'přejedený'], "temperature": ['ledový', 'studené', 'akorát', 'horký', 'vařící'], "appearance": 0-5, "tip": integer, "cook_recommendation": ['vařit', 'nevařit']}
  * Output: "string"
@@ -122,6 +122,11 @@ app.patch("/api/review", async (req, res, next) =>
 	}
 });
 
+/**
+ * Gets a list of lunches.
+ *
+ * Output: [{"date": "string", "lunches": ["type": "string", "details": "string"]}]
+ */
 app.get("/api/lunch", async (req, res) => {
 	try {
 		const data = await scrapeLunches();
@@ -130,7 +135,6 @@ app.get("/api/lunch", async (req, res) => {
 		res.status(500).json({ error: "Failed to scrape lunch data." });
 	}
 });
-
 
 app.use(express.static("dist"));
 
