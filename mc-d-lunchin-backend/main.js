@@ -125,7 +125,7 @@ app.patch("/api/review", async (req, res, next) =>
 /**
  * Gets a list of lunches.
  *
- * Output: [{"date": "string", "lunches": ["type": "string", "details": "string"]}]
+ * Output: [{"date": "string", "lunches": ["type": "string", "details": ["string"]]}]
  */
 app.get("/api/lunch", async (req, res) => {
 	try {
