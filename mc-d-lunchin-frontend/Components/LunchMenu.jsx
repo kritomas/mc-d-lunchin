@@ -15,7 +15,7 @@ const LunchMenu = () => {
   useEffect(() => {
     async function fetchData() {
       try {
-        const response = await fetch("https://your-api-endpoint.com/lunches");
+        const response = await fetch("http://localhost:42069/api/lunch");
         if (!response.ok) {
           throw new Error("Network response was not ok");
         }
@@ -32,13 +32,13 @@ const LunchMenu = () => {
 
   if (loading) {
     return (
-      <Container maxWidth="sm" sx={{ mt: 4, textAlign: "center" }}>
+      <Container maxWidth="md" sx={{ mt: 4, textAlign: "center" }}>
         <CircularProgress />
       </Container>
     );
   }
 
-  // Limit the display to the first 15 lunch items across all days.
+  // Limit the display to the first 16 lunch items across all days.
   let count = 0;
   const limitedData = menuData
     .map((day) => {
@@ -56,23 +56,55 @@ const LunchMenu = () => {
     .filter((day) => day !== null);
 
   return (
-    <Container maxWidth="sm" sx={{ mt: 4 }}>
+    <Container maxWidth="md" sx={{ mt: 4 }}>
       <Typography variant="h4" align="center" gutterBottom>
       </Typography>
-      {limitedData.map((day, index) => (
-        <Paper key={index} elevation={2} sx={{ p: 2, mb: 2 }}>
+      {limitedData.map((day, dayIndex) => (
+        <Paper
+          key={dayIndex}
+          elevation={2}
+          sx={{ p: 2, mb: 2, width: "100%" }}
+        >
           <Typography variant="h6" color="primary" gutterBottom>
             {day.date}
           </Typography>
           <List>
-            {day.lunches.map((lunch, i) => (
-              <ListItem key={i} disableGutters>
-                <Typography variant="body2" noWrap>
-                  {lunch.type} -{" "}
-                  {lunch.details.replace(/\s+/g, " ").trim()}
-                </Typography>
-              </ListItem>
-            ))}
+            {day.lunches.map((lunch, lunchIndex) => {
+              const detailsArr = String(lunch.details)
+                .split(",")
+                .map((d) => d.trim());
+              return (
+                <ListItem key={lunchIndex} disableGutters>
+                  <Typography variant="body2">
+                    {lunch.type} -{" "}
+                    {detailsArr.map((detail, idx, arr) => {
+                      let emoji = "";
+                      if (idx === 0) {
+                        // First item: soup
+                        emoji = "🍲";
+                      } else if (idx === 1) {
+                        if (arr.length === 2) {
+                          // Only two items: combine main course and drink
+                          emoji = "🍽️🍹";
+                        } else {
+                          // Second item: main course
+                          emoji = "🍽️";
+                        }
+                      } else if (idx === arr.length - 1 && idx !== 1) {
+                        // Last item (if not already handled in two-item case): drink
+                        emoji = "🍹";
+                      }
+                      return (
+                        <span key={idx}>
+                          {emoji} {detail}
+                          {idx !== arr.length - 1 ? ", " : ""}
+                        </span>
+                      );
+                    })}
+                  </Typography>
+                </ListItem>
+              );
+            })}
           </List>
         </Paper>
       ))}
