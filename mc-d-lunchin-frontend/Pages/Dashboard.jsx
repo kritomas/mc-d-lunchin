@@ -2,12 +2,13 @@ import React from 'react'
 import LunchReviewCard from '../Components/LunchReviewCard'
 import Navbar from '../Components/Navbar'
 import BottomBar from '../Components/BottomBar'
+import LunchMenu from '../Components/LunchMenu'
 
 const Dashboard = () => {
   return (
     <div>
     <Navbar/>
-    <LunchReviewCard/>
+    <LunchMenu/>
     <BottomBar/>
     </div>
   )
