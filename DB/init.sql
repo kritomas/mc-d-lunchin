@@ -74,6 +74,14 @@ CREATE TABLE review (
 COMMIT;
 -- allergens will be added lated if needed
 
+ALTER TABLE user
+DROP COLUMN name,
+DROP COLUMN last_name,
+DROP COLUMN phone,
+ADD COLUMN username VARCHAR(30);
+
+drop table credentials;
+
 delimiter //
 create view Food_Join
 as

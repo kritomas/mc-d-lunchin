@@ -3,6 +3,7 @@ import cors from "cors";
 import {LoginUser} from "./login.js";
 import {getAllFoodData} from "./Food_filter.js";
 import {createReview, updateReview} from "./review.js";
+import {scrapeLunches} from "./lunchbroker.js";
 
 const PORT = 42069;
 const app = express();
@@ -37,7 +38,7 @@ app.put("/api/user", async (req, res, next) => // Login endpoint
 });
 
 /**
- * Get Foods.
+ * Gets Foods.
  *
  * Input: {"category_whitelist": [One or more of categories], "category_blacklist": [One or more of categories], "type": ['polévká','hlavní jídlo','dezert','jiný'], "is_vegetarian": boolean}
  * Output: [Foods]
@@ -69,7 +70,7 @@ app.get("/api/food/:id", async (req, res, next) =>
 });
 
 /**
- * Post a new Review.
+ * Posts a new Review.
  *
  * Input: {"user_id": integer, "food_id": integer, "rating": 0-100, "comment": "string", "portion_size": ['hladový', 'akorát', 'přejedený'], "temperature": ['ledový', 'studené', 'akorát', 'horký', 'vařící'], "appearance": 0-5, "tip": integer, "cook_recommendation": ['vařit', 'nevařit']}
  * Output: "string"
@@ -95,7 +96,7 @@ app.post("/api/review", async (req, res, next) =>
 	}
 });
 /**
- * Update an existing Review.
+ * Updates an existing Review.
  *
  * Input: {"id": integer, "rating": 0-100, "comment": "string", "portion_size": ['hladový', 'akorát', 'přejedený'], "temperature": ['ledový', 'studené', 'akorát', 'horký', 'vařící'], "appearance": 0-5, "tip": integer, "cook_recommendation": ['vařit', 'nevařit']}
  * Output: "string"
@@ -118,6 +119,20 @@ app.patch("/api/review", async (req, res, next) =>
 	catch (e)
 	{
 		next(e);
+	}
+});
+
+/**
+ * Gets a list of lunches.
+ *
+ * Output: [{"date": "string", "lunches": ["type": "string", "details": "string"]}]
+ */
+app.get("/api/lunch", async (req, res) => {
+	try {
+		const data = await scrapeLunches();
+		res.json(data);
+	} catch (error) {
+		res.status(500).json({ error: "Failed to scrape lunch data." });
 	}
 });
 
