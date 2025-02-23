@@ -1,6 +1,6 @@
 import express from "express";
 import cors from "cors";
-import {LoginUser} from "./login.js";
+import {Login} from "./login.js";
 import {getAllFoodData} from "./Food_filter.js";
 import {createReview, updateReview} from "./review.js";
 import {scrapeLunches} from "./lunchbroker.js";
@@ -21,7 +21,7 @@ app.put("/api/user", async (req, res, next) => // Login endpoint
 	try
 	{
 		const {username, password} = req.body;
-		const result = await LoginUser(username, password);
+		const result = await Login(username, password);
 		if (result.success)
 		{
 			res.status(200).send({id: result.userId});
