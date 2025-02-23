@@ -9,6 +9,7 @@ import { styled } from '@mui/material/styles';
 import RestaurantMenuIcon from '@mui/icons-material/RestaurantMenu';
 import PsychologyIcon from '@mui/icons-material/Psychology';
 import { useState, useEffect } from "react";
+import { Link } from "react-router-dom";  // Add this import
 
 const AboutUs = () => {
     const [loopNum, setLoopNum] = useState(0);
@@ -145,13 +146,14 @@ const AboutUs = () => {
         </Box>
 
         <Box sx={{ textAlign: 'center' }}>
-          <Button 
-            variant="contained" 
-            href="/signin" 
-            sx={{ mt: 2 }}
-          >
-           Sign In
-          </Button>
+          <Link to="/signin">
+            <Button 
+              variant="contained" 
+              sx={{ mt: 2 }}
+            >
+             Sign In
+            </Button>
+          </Link>
         </Box>
       </CardContent>
     </Card>

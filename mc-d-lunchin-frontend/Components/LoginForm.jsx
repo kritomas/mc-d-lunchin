@@ -1,20 +1,46 @@
 import { useState } from "react";
 import { Card, CardHeader, CardContent, Button, TextField } from "@mui/material";
+import { useNavigate } from "react-router-dom";
 
 export default function LoginForm() {
   const [formData, setFormData] = useState({
     identifier: "",
     password: "",
   });
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Login Data:", formData);
-    // Add login logic here
+    try {
+      const response = await fetch("/api/user", {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          username: formData.identifier,
+          password: formData.password,
+        }),
+      });
+
+      if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.message);
+      }
+
+      const data = await response.json();
+      console.log("Login successful", data);
+      // Redirect to profile page after successful login
+      navigate("/profile");
+    } catch (error) {
+      console.error("Login failed:", error.message);
+      // You can show an error message to the user here
+      alert("Login failed. Please check your credentials.");
+    }
   };
 
   return (
