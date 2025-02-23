@@ -44,7 +44,7 @@ export async function scrapeLunches() {
 							.find(".column.jidelnicekItem")
 							.clone();
 						$lunchDetailsElem.find("sub").remove();
-						const lunchDetails = $lunchDetailsElem.text().trim();
+						const lunchDetails = $lunchDetailsElem.text().trim().replace(/\s*\n/gm, "\n").replace(/,\n/gm, ", ").replace(/\s{2,}/gm, "").split(",");
 
 						lunches.push({
 							type: lunchType,
