@@ -3,6 +3,7 @@ import cors from "cors";
 import {LoginUser} from "./login.js";
 import {getAllFoodData} from "./Food_filter.js";
 import {createReview, updateReview} from "./review.js";
+import {scrapeLunches} from "./lunchbroker.js";
 
 const PORT = 42069;
 const app = express();
@@ -120,6 +121,16 @@ app.patch("/api/review", async (req, res, next) =>
 		next(e);
 	}
 });
+
+app.get("/api/lunch", async (req, res) => {
+	try {
+		const data = await scrapeLunches();
+		res.json(data);
+	} catch (error) {
+		res.status(500).json({ error: "Failed to scrape lunch data." });
+	}
+});
+
 
 app.use(express.static("dist"));
 
