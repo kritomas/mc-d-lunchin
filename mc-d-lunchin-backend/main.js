@@ -136,11 +136,11 @@ app.get("/api/lunch", async (req, res) => {
 	}
 });
 
-app.use(express.static("dist"));
+app.use(express.static("/var/mc-d-lunchin/mc-d-lunchin-frontend/dist"));
 
 app.get('*', (req, res) =>
 {
-	res.sendFile("/media/localdisk/git/Praktikum/mc-d-lunchin/mc-d-lunchin-backend/dist/index.html");
+	res.sendFile("/var/mc-d-lunchin/mc-d-lunchin-frontend/dist/index.html");
 });
 
 app.listen(PORT, () =>

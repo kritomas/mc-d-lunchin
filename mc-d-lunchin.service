@@ -1,0 +1,9 @@
+[Unit]
+Description=Mc D Lunchin
+
+[Service]
+Type=simple
+ExecStart=/var/mc-d-lunchin/mc-d-lunchin-backend/start-server.sh
+
+[Install]
+WantedBy=multi-user.target
