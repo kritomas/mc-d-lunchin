@@ -1,3 +1,3 @@
 #!/bin/sh
 
-node /var/mc-d-lunchin/mc-d-lunchin-backend/main.js
+DEBUG=express:* node /var/mc-d-lunchin/mc-d-lunchin-backend/main.js
