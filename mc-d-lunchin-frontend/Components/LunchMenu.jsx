@@ -15,7 +15,7 @@ const LunchMenu = () => {
   useEffect(() => {
     async function fetchData() {
       try {
-        const response = await fetch("http://localhost:42069/api/lunch");
+        const response = await fetch("/api/lunch");
         if (!response.ok) {
           throw new Error("Network response was not ok");
         }
