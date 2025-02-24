@@ -5,7 +5,7 @@ import {getAllFoodData} from "./Food_filter.js";
 import {createReview, updateReview} from "./review.js";
 import {scrapeLunches} from "./lunchbroker.js";
 
-const PORT = 42069;
+const PORT = 8080;
 const app = express();
 app.use(cors());
 app.use(express.json());
