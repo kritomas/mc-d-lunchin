@@ -73,9 +73,9 @@ try {
         console.log('Login successful!');
         return result
     } else {
-        return { success: false, message: "Zasrany webovky chci se zabÃt" };
+        return { success: false, message: "Skill issue" };
     }
 } catch (error) {
-    console.error('An error occurred during login:', error);
+    console.error('Skill issue but with style:', error);
 }
 }
