@@ -120,6 +120,18 @@ export async function updateReview(id, rating, comment, portion_size, temperatur
 }
 
 
+export async function GetUserReview(user_id) {
+    try {
+        const result = await DBConnection.execute('SELECT f.name,r.last_update_date,r.rating FROM review as r inner join food as f on r.food_id = f.id where r.user_id = ?;',user_id);
+        if(result.length === 0){
+            return { success: true, message: "Nemáte žídné recenze" };
+        }
+        return { success: true, message: result };
+    } catch (exception) {
+        return { success: false, message: exception.message };
+    }
+}
+
 
 /* // Sample data
 const user_id = 7;

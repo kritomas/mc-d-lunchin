@@ -2,8 +2,9 @@ import express from "express";
 import cors from "cors";
 import {Login} from "./login.js";
 import {getAllFoodData} from "./Food_filter.js";
-import {createReview, updateReview} from "./review.js";
+import {createReview, updateReview, GetUserReview} from "./review.js";
 import {scrapeLunches} from "./lunchbroker.js";
+import {GetAllLunches} from "./lunches.js";
 
 const PORT = 8080;
 const app = express();
@@ -122,6 +123,27 @@ app.patch("/api/review", async (req, res, next) =>
 	}
 });
 
+app.get("/api/review", async (req, res, next) =>
+	{
+		try
+		{
+			const {user_id} = req.body;
+			const result = await GetUserReview(user_id);
+			if (result.success)
+			{
+				res.status(200).send(result.message);
+			}
+			else
+			{
+				res.status(500).send(result.message);
+			}
+		}
+		catch (e)
+		{
+			next(e);
+		}
+	});
+
 /**
  * Gets a list of lunches.
  *
@@ -135,6 +157,19 @@ app.get("/api/lunch", async (req, res) => {
 		res.status(500).json({ error: "Failed to scrape lunch data." });
 	}
 });
+
+app.get("/api/lunches", async (req, res, next) =>
+	{
+		try
+		{
+			const result = await GetAllLunches();
+			res.status(200).send(result);
+		}
+		catch (e)
+		{
+			next(e);
+		}
+	});
 
 app.use(express.static("/var/mc-d-lunchin/mc-d-lunchin-frontend/dist"));
 
