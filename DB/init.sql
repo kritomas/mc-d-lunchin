@@ -85,7 +85,7 @@ drop table credentials;
 delimiter //
 create view Food_Join
 as
-select f.id,f.name as food_name,f.type,c.name,f.is_vegetarian
+select f.id,f.name as food_name,f.type,c.name
 from food as f inner join food_category as fc on fc.food_id = f.id
 				inner join category as c on fc.category_id = c.id; //
                 
