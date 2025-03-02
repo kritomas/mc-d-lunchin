@@ -17,7 +17,7 @@ CREATE TABLE credentials (
     username VARCHAR(100) NOT NULL UNIQUE,
     password VARCHAR(255) NOT NULL,
     user_id INT NOT NULL unique,
-    
+
 	CONSTRAINT fk_credentials_user_id
 			FOREIGN KEY (user_id) REFERENCES user(id)
 			ON DELETE CASCADE ON UPDATE CASCADE
@@ -88,7 +88,7 @@ as
 select f.id,f.name as food_name,f.type,c.name
 from food as f inner join food_category as fc on fc.food_id = f.id
 				inner join category as c on fc.category_id = c.id; //
-                
+
 alter table food
 DROP COLUMN is_vegetarian,
 add column date date;

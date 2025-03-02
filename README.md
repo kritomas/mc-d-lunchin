@@ -8,14 +8,16 @@
 ## Database
 
 1.	In your MySQL server, create a database and invoke `DB/init.sql`.
-2.	Create file `mc-d-lunchin-backend/.env` with the following format:
+2.	Create file `mc-d-lunchin-backend/sql_credentials.json` with the following format:
 
 ```
-host=[IP of DB Server]
-user=[User of DB Server]
-password=[Password for user]
-database=[DB Name]
-port=[Port of DB Server]
+{
+	"host": "[IP of DB Server]",
+	"user": "[User of DB Server]",
+	"password": "[Password for user]",
+	"database": "[DB Name]",
+	"port": [Port of DB Server]
+}
 ```
 
 ## Backend

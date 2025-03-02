@@ -45,7 +45,6 @@ export async function getAllFoodData(categoriesIn, categoriesNotIn, typesIn, isV
     return filteredByType;
 }
 
-
 /* async function exampleCall() {
     // Define the categories, types, and vegetarian flag you want to use
     const categoriesIn = ['Slané']; // Categories to include

@@ -27,3 +27,4 @@ dist-ssr
 .vs
 
 .env
+sql_credentials.json
