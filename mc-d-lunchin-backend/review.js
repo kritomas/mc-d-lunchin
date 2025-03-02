@@ -132,6 +132,18 @@ export async function GetUserReview(user_id) {
     }
 }
 
+export async function GetFoodReview(food_id) {
+    try {
+        const result = await DBConnection.execute('SELECT * FROM Food_review.review as r inner join Food_review.food as f on r.food_id = f.id where f.id = ?;',food_id);
+        if(result.length === 0){
+            return { success: true, message: "Nemá žádné recenze" };
+        }
+        return { success: true, message: result };
+    } catch (exception) {
+        return { success: false, message: exception.message };
+    }
+}
+
 
 /* // Sample data
 const user_id = 7;

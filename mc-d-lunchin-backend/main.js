@@ -2,7 +2,7 @@ import express from "express";
 import cors from "cors";
 import {Login} from "./login.js";
 import {getAllFoodData} from "./Food_filter.js";
-import {createReview, updateReview, GetUserReview} from "./review.js";
+import {createReview, updateReview, GetUserReview, GetFoodReview} from "./review.js";
 import {scrapeLunches} from "./lunchbroker.js";
 import {GetAllLunches} from "./lunches.js";
 
@@ -129,6 +129,27 @@ app.get("/api/review", async (req, res, next) =>
 		{
 			const {user_id} = req.body;
 			const result = await GetUserReview(user_id);
+			if (result.success)
+			{
+				res.status(200).send(result.message);
+			}
+			else
+			{
+				res.status(500).send(result.message);
+			}
+		}
+		catch (e)
+		{
+			next(e);
+		}
+	});
+
+app.get("/api/food_review", async (req, res, next) =>
+	{
+		try
+		{
+			const {food_id} = req.body;
+			const result = await GetFoodReview(food_id);
 			if (result.success)
 			{
 				res.status(200).send(result.message);
