@@ -123,11 +123,11 @@ app.patch("/api/review", async (req, res, next) =>
 	}
 });
 
-app.get("/api/review", async (req, res, next) =>
+app.get("/api/review/:id", async (req, res, next) =>
 	{
 		try
 		{
-			const {user_id} = req.body;
+			const user_id = req.params.id;
 			const result = await GetUserReview(user_id);
 			if (result.success)
 			{
@@ -144,11 +144,11 @@ app.get("/api/review", async (req, res, next) =>
 		}
 	});
 
-app.get("/api/food_review", async (req, res, next) =>
+app.get("/api/food_review/:id", async (req, res, next) =>
 	{
 		try
 		{
-			const {food_id} = req.body;
+			const food_id = req.params.id;
 			const result = await GetFoodReview(food_id);
 			if (result.success)
 			{
