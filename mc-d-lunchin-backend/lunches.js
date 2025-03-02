@@ -8,5 +8,3 @@ export async function GetAllLunches() {
         return { success: false, message: error.message };
     }
 }
-
-console.log(await GetAllLunches())
