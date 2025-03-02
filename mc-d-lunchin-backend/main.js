@@ -191,13 +191,24 @@ app.get("/api/lunches", async (req, res, next) =>
 			next(e);
 		}
 	});
+	//! for linux 
+	// app.use(express.static("/var/mc-d-lunchin/mc-d-lunchin-frontend/dist"));
 
-app.use(express.static("/var/mc-d-lunchin/mc-d-lunchin-frontend/dist"));
+	// app.get('*', (req, res) =>
+	// {
+	// 	res.sendFile("/var/mc-d-lunchin/mc-d-lunchin-frontend/dist/index.html");
+	// });
 
-app.get('*', (req, res) =>
-{
-	res.sendFile("/var/mc-d-lunchin/mc-d-lunchin-frontend/dist/index.html");
-});
+    // ! for windows
+	app.use(express.static(
+		"C:\\webVeSkole\\mc-d-lunchin\\mc-d-lunchin-frontend\\dist"
+	  ));
+	
+	  app.get('*', (req, res) => {
+		res.sendFile(
+		  "C:\\webVeSkole\\mc-d-lunchin\\mc-d-lunchin-frontend\\dist\\index.html"
+		);
+	  });
 
 app.listen(PORT, () =>
 {

@@ -8,6 +8,8 @@ import LoginPage from '../Pages/LoginPage'
 import FoodFilter from '../Components/FoodFilter';
 import ProfilePage from '../Pages/ProfilePage';
 import Dashboard from '../Pages/Dashboard';
+import UserReview from '../Pages/UserReview';
+import ReviewPage from '../Pages/ReviewPage';
 
 
 const darkTheme = createTheme({
@@ -33,6 +35,8 @@ function App() {
           <Route path="/filter" element={<FoodFilter />} />
           <Route path="/profile" element={<ProfilePage />} />
           <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/userreview" element={<UserReview />} />
+          <Route path="/review" element={<ReviewPage />} />
         </Routes>
       </div>
     </Router>

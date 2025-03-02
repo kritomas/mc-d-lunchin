@@ -6,21 +6,32 @@ import {
   Paper,
   List,
   ListItem,
+  Pagination,
+  Box,
+  Button,
 } from "@mui/material";
 
 const LunchMenu = () => {
   const [menuData, setMenuData] = useState([]);
   const [loading, setLoading] = useState(true);
+  // currentPage is 0-indexed.
+  const [currentPage, setCurrentPage] = useState(0);
+  // Each page shows up to 16 lunch items.
+  const pageSize = 16;
 
   useEffect(() => {
     async function fetchData() {
       try {
-        const response = await fetch("/api/lunch");
+        const response = await fetch("/api/lunches");
         if (!response.ok) {
           throw new Error("Network response was not ok");
         }
-        const data = await response.json();
-        setMenuData(data);
+        const result = await response.json();
+        if (result.success) {
+          setMenuData(result.data);
+        } else {
+          console.error("API error:", result.message);
+        }
       } catch (error) {
         console.error("Error fetching the data:", error);
       } finally {
@@ -30,6 +41,68 @@ const LunchMenu = () => {
     fetchData();
   }, []);
 
+  // Helper: return an emoji based on the lunch type.
+  const getEmoji = (type) => {
+    if (type === "polévká") return "🍲";
+    if (type === "hlavní jídlo") return "🍽️";
+    return "";
+  };
+
+  // Stubbed review handler; implement your review logic here.
+  const handleReview = (lunch) => {
+    console.log(`Reviewing ${lunch.name}`);
+    // You might open a modal or navigate to another page, etc.
+  };
+
+  // Group all lunches by date using a date key (YYYY-MM-DD)
+  const groupsMap = {};
+  menuData.forEach((lunch) => {
+    const dateKey = new Date(lunch.date).toISOString().split("T")[0];
+    if (!groupsMap[dateKey]) {
+      groupsMap[dateKey] = [];
+    }
+    groupsMap[dateKey].push(lunch);
+  });
+
+  let groups = Object.keys(groupsMap).map((date) => ({
+    date,
+    lunches: groupsMap[date],
+  }));
+
+  // Sort groups by date ascending.
+  groups.sort((a, b) => new Date(a.date) - new Date(b.date));
+
+  // Paginate groups without splitting a group across pages.
+  // We accumulate groups until adding another would exceed the
+  // pageSize (in terms of total lunch items). If a single group
+  // has more items than pageSize, it is forced onto its own page.
+  const paginateGroups = (groups, pageSize) => {
+    const pages = [];
+    let currentPageGroups = [];
+    let currentCount = 0;
+    groups.forEach((group) => {
+      if (group.lunches.length > pageSize && currentCount === 0) {
+        // This group itself is larger than pageSize; place on its own page.
+        pages.push([group]);
+      } else if (currentCount + group.lunches.length > pageSize && currentCount > 0) {
+        pages.push(currentPageGroups);
+        currentPageGroups = [group];
+        currentCount = group.lunches.length;
+      } else {
+        currentPageGroups.push(group);
+        currentCount += group.lunches.length;
+      }
+    });
+    if (currentPageGroups.length > 0) {
+      pages.push(currentPageGroups);
+    }
+    return pages;
+  };
+
+  const pages = paginateGroups(groups, pageSize);
+  const totalPages = pages.length;
+  const currentPageGroups = pages[currentPage] || [];
+
   if (loading) {
     return (
       <Container maxWidth="md" sx={{ mt: 4, textAlign: "center" }}>
@@ -38,76 +111,62 @@ const LunchMenu = () => {
     );
   }
 
-  // Limit the display to the first 16 lunch items across all days.
-  let count = 0;
-  const limitedData = menuData
-    .map((day) => {
-      if (count >= 16) return null;
-      const limitedLunches = day.lunches.filter(() => {
-        if (count < 16) {
-          count++;
-          return true;
-        }
-        return false;
-      });
-      if (limitedLunches.length === 0) return null;
-      return { ...day, lunches: limitedLunches };
-    })
-    .filter((day) => day !== null);
-
   return (
     <Container maxWidth="md" sx={{ mt: 4 }}>
       <Typography variant="h4" align="center" gutterBottom>
+        Lunch Menu
       </Typography>
-      {limitedData.map((day, dayIndex) => (
-        <Paper
-          key={dayIndex}
-          elevation={2}
-          sx={{ p: 2, mb: 2, width: "100%" }}
-        >
-          <Typography variant="h6" color="primary" gutterBottom>
-            {day.date}
-          </Typography>
-          <List>
-            {day.lunches.map((lunch, lunchIndex) => {
-              const detailsArr = String(lunch.details)
-                .split(",")
-                .map((d) => d.trim());
-              return (
-                <ListItem key={lunchIndex} disableGutters>
-                  <Typography variant="body2">
-                    {lunch.type} -{" "}
-                    {detailsArr.map((detail, idx, arr) => {
-                      let emoji = "";
-                      if (idx === 0) {
-                        // First item: soup
-                        emoji = "🍲";
-                      } else if (idx === 1) {
-                        if (arr.length === 2) {
-                          // Only two items: combine main course and drink
-                          emoji = "🍽️🍹";
-                        } else {
-                          // Second item: main course
-                          emoji = "🍽️";
-                        }
-                      } else if (idx === arr.length - 1 && idx !== 1) {
-                        // Last item (if not already handled in two-item case): drink
-                        emoji = "🍹";
-                      }
-                      return (
-                        <span key={idx}>
-                          {emoji} {detail}
-                          {idx !== arr.length - 1 ? ", " : ""}
-                        </span>
-                      );
-                    })}
-                  </Typography>
+      {currentPageGroups.map((group, index) => {
+        // Format the date to a friendlier format.
+        const formattedDate = new Date(group.date).toLocaleDateString();
+        return (
+          <Paper
+            key={index}
+            elevation={2}
+            sx={{ p: 2, mb: 2, width: "100%" }}
+          >
+            <Typography variant="h6" color="primary" gutterBottom>
+              {formattedDate}
+            </Typography>
+            <List>
+              {group.lunches.map((lunch) => (
+                <ListItem key={lunch.id} disableGutters>
+                  <Box
+                    sx={{
+                      display: "flex",
+                      width: "100%",
+                      justifyContent: "space-between",
+                      alignItems: "center",
+                    }}
+                  >
+                    <Typography variant="body2">
+                      {getEmoji(lunch.type)} {lunch.name}
+                    </Typography>
+                    <Button
+                      variant="outlined"
+                      size="small"
+                      onClick={() => handleReview(lunch)}
+                    >
+                      Review
+                    </Button>
+                  </Box>
                 </ListItem>
-              );
-            })}
-          </List>
-        </Paper>
-      ))}
+              ))}
+            </List>
+          </Paper>
+        );
+      })}
+      {/* Only show pagination if there are multiple pages */}
+      {totalPages > 1 && (
+        <Box display="flex" justifyContent="center" sx={{ my: 4 }}>
+          <Pagination
+            count={totalPages}
+            page={currentPage + 1} // Pagination uses 1-indexed page numbers.
+            onChange={(event, value) => setCurrentPage(value - 1)}
+            color="primary"
+          />
+        </Box>
+      )}
     </Container>
   );
 };

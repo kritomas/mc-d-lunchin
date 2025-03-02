@@ -12,13 +12,19 @@ import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import AdbIcon from '@mui/icons-material/Adb';
-import { useNavigate } from 'react-router-dom';
-import { Link } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 
 const pages = [];
-const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
 
 function Navbar() {
+  // Simulate your login state. Change to true to simulate a logged-in user.
+  const isLoggedIn = false;
+
+  // Conditionally display menu settings based on login status.
+  const settings = isLoggedIn
+    ? ['Profile', 'Dashboard']
+    : ['Sign In'];
+
   const navigate = useNavigate();
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
@@ -26,6 +32,7 @@ function Navbar() {
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
   };
+
   const handleOpenUserMenu = (event) => {
     setAnchorElUser(event.currentTarget);
   };
@@ -39,7 +46,14 @@ function Navbar() {
   };
 
   return (
-    <AppBar position="fixed" sx={{ width: '100%', padding: '0 1rem', boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)' }}>
+    <AppBar
+      position="fixed"
+      sx={{
+        width: '100%',
+        padding: '0 1rem',
+        boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
+      }}
+    >
       <Container maxWidth="100%" sx={{ padding: '0 20px' }}>
         <Toolbar disableGutters>
           <AdbIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} />
@@ -87,11 +101,13 @@ function Navbar() {
               }}
               open={Boolean(anchorElNav)}
               onClose={handleCloseNavMenu}
-              sx={{ display: { xs: 'block', md: 'none' }}}
+              sx={{ display: { xs: 'block', md: 'none' } }}
             >
               {pages.map((page) => (
                 <MenuItem key={page} onClick={handleCloseNavMenu}>
-                  <Typography sx={{ textAlign: 'center' }}>{page}</Typography>
+                  <Typography sx={{ textAlign: 'center' }}>
+                    {page}
+                  </Typography>
                 </MenuItem>
               ))}
             </Menu>
@@ -130,7 +146,7 @@ function Navbar() {
           <Box sx={{ flexGrow: 0 }}>
             <Tooltip title="Open settings">
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                <Avatar alt="TP" src="src\assets\fm.png" />
+                <Avatar alt="TP" src="src/assets/fm.png" />
               </IconButton>
             </Tooltip>
             <Menu
@@ -150,16 +166,22 @@ function Navbar() {
               onClose={handleCloseUserMenu}
             >
               {settings.map((setting) => (
-                <MenuItem 
-                  key={setting} 
+                <MenuItem
+                  key={setting}
                   onClick={() => {
                     if (setting === 'Profile') {
                       navigate('/profile');
+                    } else if (setting === 'Dashboard') {
+                      navigate('/dashboard');
+                    } else if (setting === 'Sign In') {
+                      navigate('/signin');
                     }
                     handleCloseUserMenu();
                   }}
                 >
-                  <Typography sx={{ textAlign: 'center' }}>{setting}</Typography>
+                  <Typography sx={{ textAlign: 'center' }}>
+                    {setting}
+                  </Typography>
                 </MenuItem>
               ))}
             </Menu>
