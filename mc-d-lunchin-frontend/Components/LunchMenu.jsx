@@ -10,6 +10,7 @@ import {
   Box,
   Button,
 } from "@mui/material";
+import { useNavigate } from "react-router-dom";
 
 const LunchMenu = () => {
   const [menuData, setMenuData] = useState([]);
@@ -18,6 +19,7 @@ const LunchMenu = () => {
   const [currentPage, setCurrentPage] = useState(0);
   // Each page shows up to 16 lunch items.
   const pageSize = 16;
+  const navigate = useNavigate();
 
   useEffect(() => {
     async function fetchData() {
@@ -48,10 +50,11 @@ const LunchMenu = () => {
     return "";
   };
 
-  // Stubbed review handler; implement your review logic here.
+  // Navigate to the review page for the selected lunch,
+  // and store the current lunch's id in localStorage.
   const handleReview = (lunch) => {
-    console.log(`Reviewing ${lunch.name}`);
-    // You might open a modal or navigate to another page, etc.
+    localStorage.setItem("selectedLunchId", lunch.id);
+    navigate(`/review/`);
   };
 
   // Group all lunches by date using a date key (YYYY-MM-DD)
@@ -84,7 +87,10 @@ const LunchMenu = () => {
       if (group.lunches.length > pageSize && currentCount === 0) {
         // This group itself is larger than pageSize; place on its own page.
         pages.push([group]);
-      } else if (currentCount + group.lunches.length > pageSize && currentCount > 0) {
+      } else if (
+        currentCount + group.lunches.length > pageSize &&
+        currentCount > 0
+      ) {
         pages.push(currentPageGroups);
         currentPageGroups = [group];
         currentCount = group.lunches.length;
@@ -120,11 +126,7 @@ const LunchMenu = () => {
         // Format the date to a friendlier format.
         const formattedDate = new Date(group.date).toLocaleDateString();
         return (
-          <Paper
-            key={index}
-            elevation={2}
-            sx={{ p: 2, mb: 2, width: "100%" }}
-          >
+          <Paper key={index} elevation={2} sx={{ p: 2, mb: 2, width: "100%" }}>
             <Typography variant="h6" color="primary" gutterBottom>
               {formattedDate}
             </Typography>
@@ -161,7 +163,7 @@ const LunchMenu = () => {
         <Box display="flex" justifyContent="center" sx={{ my: 4 }}>
           <Pagination
             count={totalPages}
-            page={currentPage + 1} // Pagination uses 1-indexed page numbers.
+            page={currentPage + 1}
             onChange={(event, value) => setCurrentPage(value - 1)}
             color="primary"
           />

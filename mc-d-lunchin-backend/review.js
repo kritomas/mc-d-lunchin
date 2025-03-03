@@ -122,7 +122,7 @@ export async function updateReview(id, rating, comment, portion_size, temperatur
 
 export async function GetUserReview(user_id) {
     try {
-        const result = await DBConnection.execute('SELECT f.name,r.last_update_date,r.rating FROM review as r inner join food as f on r.food_id = f.id where r.user_id = ?;',user_id);
+        const result = await DBConnection.execute('SELECT f.name,r.last_update_date,r.rating FROM review as r inner join food as f on r.food_id = f.id where r.user_id = ?;',[user_id]);
         if(result.length === 0){
             return { success: true, message: "Nemáte žídné recenze" };
         }
@@ -134,7 +134,7 @@ export async function GetUserReview(user_id) {
 
 export async function GetFoodReview(food_id) {
     try {
-        const result = await DBConnection.execute('SELECT * FROM Food_review.review as r inner join Food_review.food as f on r.food_id = f.id where f.id = ?;',food_id);
+        const result = await DBConnection.execute('SELECT * FROM Food_review.review as r inner join Food_review.food as f on r.food_id = f.id where f.id = ?;',[food_id]);
         if(result.length === 0){
             return { success: true, message: "Nemá žádné recenze" };
         }
