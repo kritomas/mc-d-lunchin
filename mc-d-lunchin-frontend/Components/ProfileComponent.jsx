@@ -31,7 +31,7 @@ function ProfileComponent() {
       id: idFromCookie,
       title: "Your reviews.",
     },
-   
+
   ]);
 
   return (
@@ -121,7 +121,7 @@ function ProfileComponent() {
                       justifyContent: "space-between",
                       alignItems: "center",
                     }}
-                    onClick={() => navigate(`/userreview}`)}
+                    onClick={() => navigate(`/userreview`)}
                   >
                     <Typography variant="body1">{review.title}</Typography>
                     <Typography variant="body2" color="text.secondary">
