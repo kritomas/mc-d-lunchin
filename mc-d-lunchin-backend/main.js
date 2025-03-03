@@ -123,7 +123,7 @@ app.patch("/api/review", async (req, res, next) =>
 	}
 });
 
-app.get("/api/review/:id", async (req, res, next) =>
+app.get("/api/user_review/:id", async (req, res, next) =>
 	{
 		try
 		{
