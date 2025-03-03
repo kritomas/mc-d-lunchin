@@ -36,10 +36,10 @@ const LunchReviewCard = () => {
   const [userId] = useState(1);
   const [foodId] = useState(1);
 
-  const handleSubmitReview = () => {
+  const handleSubmitReview = async () => {
     // Build the review object matching your SQL table columns.
+    // Map extraPay to tip to match the expected API field.
     const newReview = {
-      // Auto-generated id is handled by the database.
       user_id: userId,
       food_id: foodId,
       rating, // overall rating, assumed to be scaled appropriately
@@ -47,12 +47,28 @@ const LunchReviewCard = () => {
       portion_size: portionSize,
       temperature, // one of 'ledový', 'studené', 'akorát', 'horký', or 'vařící'
       appearance: appearanceRating, // 0 to 5 (as per CHECK 0<=appearance<=5)
-      extra_pay: extraPay,
+      tip: extraPay,
       cook_recommendation: cookRecommendation, // either 'vařit' or 'nevařit'
-      // original_created_date will be set automatically in the database.
     };
 
-    console.log('Submitted Review:', newReview);
+    try {
+      const response = await fetch('/api/review', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(newReview),
+      });
+
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+
+      const data = await response.text();
+      console.log('Review submitted successfully:', data);
+    } catch (error) {
+      console.error('There was an error submitting the review:', error);
+    }
 
     // Compute the new average for the overall rating
     setAverageRating(

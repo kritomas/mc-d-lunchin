@@ -9,23 +9,22 @@ const ReviewPerUser = () => {
   // Retrieve the user id from cookies (adjust the cookie name if needed)
   const userId = Cookies.get("userId");
 
-  // Function to fetch reviews by sending the user id in the request body.
   async function getUserReviews() {
+    if (!userId) {
+      setError("User ID not found in cookies. Please log in.");
+      return;
+    }
+
     setLoading(true);
     setError(null);
 
     try {
-      const response = await fetch("/api/review", {
+      const response = await fetch(`/api/food_review/${userId}`, {
         method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        // Send the user id in the body of the GET request
-        body: JSON.stringify({ user_id: userId }),
+        headers: { "Content-Type": "application/json" },
       });
 
       if (!response.ok) {
-        // If not okay, try to extract error details from the response.
         let errorMessage = "Failed to fetch user reviews.";
         try {
           const errorData = await response.json();
@@ -36,17 +35,28 @@ const ReviewPerUser = () => {
         throw new Error(errorMessage);
       }
 
-      // Parse the JSON response
-      try {
-        const data = await response.json();
-        if (!Array.isArray(data)) {
-          throw new Error("Unexpected data format received.");
-        }
-        setReviews(data);
-      } catch (jsonError) {
-        console.error("Error parsing JSON response:", jsonError);
-        throw new Error("Invalid server response.");
+      const data = await response.json();
+      // Log the response for debugging purposes
+      console.log("API response data:", data);
+
+      let reviewsArray = [];
+      // Case 1: The API returns an array directly
+      if (Array.isArray(data)) {
+        reviewsArray = data;
       }
+      // Case 2: The API returns an object with success flag and a "message" field that holds reviews
+      else if (data.success === true && Array.isArray(data.message)) {
+        reviewsArray = data.message;
+      }
+      // Case 3: The API returns an object with success flag and a "reviews" field that holds reviews
+      else if (data.success === true && Array.isArray(data.reviews)) {
+        reviewsArray = data.reviews;
+      } else {
+        // If none of the expected formats match, throw an error
+        throw new Error("Unknown error from API, unexpected response structure.");
+      }
+
+      setReviews(reviewsArray);
     } catch (err) {
       console.error("Error fetching user reviews:", err);
       setError(err.message || "An unknown error occurred.");
@@ -58,8 +68,6 @@ const ReviewPerUser = () => {
   useEffect(() => {
     if (userId) {
       getUserReviews();
-    } else {
-      setError("User ID not found in cookies. Please log in.");
     }
   }, [userId]);
 
@@ -73,10 +81,11 @@ const ReviewPerUser = () => {
       )}
       {!loading && !error && reviews.length > 0 && (
         <ul>
-          {reviews.map((review) => (
-            <li key={review.id}>
-              <h4>{review.title}</h4>
-              <p>{review.date}</p>
+          {reviews.map((review, index) => (
+            <li key={index}>
+              <h4>{review.name}</h4>
+              <p>Last Updated: {review.last_update_date}</p>
+              <p>Rating: {review.rating}</p>
             </li>
           ))}
         </ul>

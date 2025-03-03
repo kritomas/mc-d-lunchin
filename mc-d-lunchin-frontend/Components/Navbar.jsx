@@ -1,4 +1,5 @@
 import * as React from 'react';
+import Cookies from 'js-cookie';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
@@ -17,8 +18,11 @@ import { useNavigate, Link } from 'react-router-dom';
 const pages = [];
 
 function Navbar() {
-  // Simulate your login state. Change to true to simulate a logged-in user.
-  const isLoggedIn = false;
+  // Check login state from cookies.
+  // This assumes that you've set a cookie "loggedIn" with value "true"/"false".
+  const isLoggedIn = Cookies.get('loggedIn') === 'true';
+  console.log("loggedIn cookie:", Cookies.get("loggedIn"));
+
 
   // Conditionally display menu settings based on login status.
   const settings = isLoggedIn
